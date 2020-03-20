@@ -1,13 +1,11 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from tabulate import tabulate
 from flask import Flask
 from flask import request
 from flask import jsonify
 import requests
 import json
-import io
 
 #Flask
 app = Flask(__name__)
