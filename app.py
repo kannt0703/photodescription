@@ -30,7 +30,7 @@ def get_tags(photo_url):
         'Sec-Fetch-Site': 'none',
         'Sec-Fetch-Mode': 'navigate'
         }
-    proxies = { 'https' : 'https://g3DbjUAjxs:leonidalekseevv@185.156.178.92:26160' }
+    proxies = { 'http' : 'http://@188.170.233.113:3128' }
     html_url = requests.get(yandex_search, headers=headers, proxies=proxies) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
     tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]') # a теги с атрибутом clas равным "..."
