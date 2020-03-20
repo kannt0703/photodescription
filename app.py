@@ -28,7 +28,7 @@ def completequeue():
     while True:
         try:
             id, url_photo = queue.get()
-            vk.method("messages.send", {"peer_id": id, "message": url_photo, "random_id": random.randint(1, 2147483647)})
+            vk.method("messages.send", {"peer_id": id, "message": get_result(photo_url), "random_id": random.randint(1, 2147483647)})
         except Exception as log_errore:
             print("LOG_completequeue:", log_errore) # Лог ошибок функции completequeue
 complete_queue = Thread(target=completequeue)
