@@ -33,11 +33,16 @@ def index():
                 attachments = object["attachments"]
                 if attachments != []: # Проверяем есть ли прикрепления
                     if attachments[0]["type"] == "photo": # Проверяем есть ли фото в прикреплении
-                        print("3")
+                        print("1")
                         id = object["peer_id"]
+                        print("2")
+                        photo = attachments[0]["photo"]
+                        print("3")
+                        largest_photo = photo["sizes"][-1]
                         print("4")
-                        vk.method("messages.send", {"peer_id": id, "message": "Фото!", "random_id": random.randint(1, 2147483647)})
+                        url_photo = largest_photo["url"]
                         print("5")
+                        vk.method("messages.send", {"peer_id": id, "message": url_photo, "random_id": random.randint(1, 2147483647)})
                 # ----- Обработка команд -----
                 # body = object["text"]
                 # if body.lower() == "привет":
