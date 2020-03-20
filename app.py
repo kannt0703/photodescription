@@ -6,7 +6,7 @@ from flask import Flask, request, json
 import vk_api
 import random
 
-vk = vk_api.VkApi(token="токен бота")
+vk = vk_api.VkApi(token="dafd425228fbc59657b126eaba4c2530f4781af8a9ccbb53639c7a0dbc09db5670daf8cd8529297223658")
 
 app = Flask(__name__)
 
