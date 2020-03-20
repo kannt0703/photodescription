@@ -11,13 +11,15 @@ import vk_api
 import json
 import os
 
-#Flask
-app = Flask(__name__)
-sslify = SSLify(app)
 
+# VkApi
 token = str(os.environ.get("TOKEN"))
 confirmation_token = str(os.environ.get("CONFIRMATION_TOKEN"))
 vk = vk_api.VkApi(token=token, api_version='5.89')
+# -VkApi
+# Flask
+app = Flask(__name__)
+sslify = SSLify(app)
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -26,15 +28,11 @@ def index():
         if data["type"] == "confirmation": # подтверждение CallBack
             return "88feaf44"
         elif data["type"] == "message_new":
-            object = data["object"]
-            print(object)
             try:
-                object_keys = object.keys()
-                print(object_keys)
-                if "attachments" in object.keys(): # Проверяем есть ли прикрепления
-                    attachments = object["attachments"]
-                    print(attachments)
-                    if attachments["type"] == "photo": # Проверяем есть ли фото в сообщении
+                object = data["object"]
+                attachments = object["attachments"]
+                if attachments != []: # Проверяем есть ли прикрепления
+                    if attachments["type"] == "photo": # Проверяем есть ли фото в прикреплении
                         id = object["peer_id"]
                         vk.method("messages.send", {"peer_id": id, "message": "Фото!", "random_id": random.randint(1, 2147483647)})
                 # ----- Обработка команд -----
@@ -47,7 +45,7 @@ def index():
     elif request.method == 'GET':
         return '<h1>VKBot working now!</h1>'
     return 'OK'
-#-Flask
+# -Flask
 
 if __name__ == '__main__':
     app.debug = True
