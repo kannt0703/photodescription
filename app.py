@@ -16,8 +16,22 @@ import time # YandexPars
 # YandexPars
 def get_tags(photo_url):
     yandex_search = "https://yandex.ru/images/search?source=collections&rpt=imageview&rdrnd="+str(random.randint(100000, 999999))+"&redircnt="+str(random.randint(1000000000, 9999999999))+".1&url="+photo_url
-    user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
-    html_url = requests.get(yandex_search, headers={'User-Agent':user_agent}) # загрузить страницу запроса
+    headers = {
+        'device-memory': '8',
+        'dpr': '1',
+        'viewport-width': '1920',
+        'rtt': '50',
+        'downlink': '2.25',
+        'ect': '4g',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
+        'Sec-Fetch-Dest': 'document',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-Mode': 'navigate'
+        }
+    proxies = { 'https' : 'https://g3DbjUAjxs:leonidalekseevv@185.156.178.92:26160'
+    html_url = requests.get(yandex_search, headers=headers, proxies=proxies) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
     tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]') # a теги с атрибутом clas равным "..."
     tags = [i.text for i in tags_tree] # преобразовать в текст найденные теги
@@ -26,7 +40,7 @@ def get_tags(photo_url):
 def get_result(photo_url):
     tags = get_tags(photo_url)
     if tags == []: # перепроверка, если нет тегов
-        time.sleep(random.randint(7, 10))
+        time.sleep(random.randint(5, 8))
         tags = get_tags(photo_url)
         if tags == []: # если второй раз нет тегов
             return "Кажется, на картинке что-то непонятное."
