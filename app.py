@@ -14,7 +14,7 @@ app = Flask(__name__)
 def main():
     data = json.loads(request.data)
     if data["type"] == "confirmation":
-        return "код подтверждения"
+        return "88feaf44"
     elif data["type"] == "message_new":
         object = data["object"]
         id = object["peer_id"]
