@@ -7,6 +7,7 @@ from flask import jsonify
 from flask_sslify import SSLify
 import requests
 import random
+import vk_api
 import json
 import os
 
