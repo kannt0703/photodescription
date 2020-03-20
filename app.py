@@ -16,7 +16,8 @@ import time # YandexPars
 # YandexPars
 def get_tags(photo_url):
     yandex_search = "https://yandex.ru/images/search?source=collections&rpt=imageview&rdrnd="+str(random.randint(100000, 999999))+"&redircnt="+str(random.randint(1000000000, 9999999999))+".1&url="+photo_url
-    html_url = requests.get(yandex_search) # загрузить страницу запроса
+    user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
+    html_url = requests.get(yandex_search, headers={'User-Agent':user_agent}) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
     tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]') # a теги с атрибутом clas равным "..."
     tags = [i.text for i in tags_tree] # преобразовать в текст найденные теги
