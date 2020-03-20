@@ -15,7 +15,7 @@ import time # YandexPars
 
 # YandexPars
 def get_tags(photo_url):
-    yandex_search = "https://yandex.ru/images/search?source=collections&rpt=imageview&rdrnd=250420&redircnt=1584733521.1&cbir_id=2475320%2FndbHpQwlZzlL3RRxgxryGA&url="+photo_url
+    yandex_search = "https://yandex.ru/images/search?source=collections&rpt=imageview&rdrnd=250420&redircnt=1584733521.1&url="+photo_url
     html_url = requests.get(yandex_search) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
     tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]') # a теги с атрибутом clas равным "..."
