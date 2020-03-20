@@ -22,18 +22,23 @@ vk = vk_api.VkApi(token=token, api_version='5.89')
 def index():
     if request.method == 'POST':
         data = json.loads(request.data)
-        if data["type"] == "confirmation":
+        if data["type"] == "confirmation": # подтверждение CallBack
             return "88feaf44"
         elif data["type"] == "message_new":
             object = data["object"]
-            id = object["peer_id"]
-            body = object["text"]
-            if body.lower() == "привет":
-                vk.method("messages.send", {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 2147483647)})
-            elif body.lower() == "тест":
-                vk.method("messages.send", {"peer_id": id, "message": "Тест!", "random_id": random.randint(1, 2147483647)})
-            else:
-                vk.method("messages.send", {"peer_id": id, "message": "Не понял тебя!", "random_id": random.randint(1, 2147483647)})
+            try:
+                if "attachments" in object: # Проверяем есть ли прикрепления
+                    attachments = object["attachments"]
+                    if attachments["type"] == "photo": # Проверяем есть ли фото в сообщении
+                        id = object["peer_id"]
+                        vk.method("messages.send", {"peer_id": id, "message": "Фото!", "random_id": random.randint(1, 2147483647)})
+                # ----- Обработка команд -----
+                # body = object["text"]
+                # if body.lower() == "привет":
+                #     vk.method("messages.send", {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 2147483647)})
+                # ----------------------------
+            except:
+                print("LOG: Error while check attachments") # Лог ошибок
     elif request.method == 'GET':
         return '<h1>VKBot working now!</h1>'
     return 'OK'
