@@ -16,7 +16,7 @@ def index():
     if request.method == 'POST':
         data = json.loads(request.data)
         if data["type"] == "confirmation":
-        return "88feaf44"
+            return "88feaf44"
     return '<h1>Bot.py working now!</h1>'
 #-Flask
 
