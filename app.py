@@ -34,6 +34,50 @@ def completequeue():
 complete_queue = Thread(target=completequeue)
 complete_queue.start()
 
+#ProxyParse
+def get_proxy():
+    proxy_site = "http://spys.one/"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+        }
+    html_url = requests.get(proxy_site, headers=headers)
+    tree_html = html.fromstring(html_url.text.encode('UTF-8'))
+    tr_elements = tree_html.xpath('//tr[contains(@class, "spy1x")]')
+    #Create empty list
+    col=[]
+    i=0
+    #For each row, store each first element (header) and an empty list
+    for t in tr_elements[0]:
+        i+=1
+        name=t.text_content()
+        col.append((name,[]))
+    #Since out first row is the header, data is stored on the second row onwards
+    for j in range(1,len(tr_elements)):
+        #T is our j'th row
+        T=tr_elements[j]
+        #If row is not of size 10, the //tr data is not from our table
+        if len(T)!=6:
+            break
+        #i is the index of our column
+        i=0
+        #Iterate through each element of the row
+        for t in T.iterchildren():
+            data=t.text_content()
+            #Check if row is empty
+            if i>0:
+            #Convert any numerical value to integers
+                try:
+                    data=int(data)
+                except:
+                    pass
+            #Append the data to the empty list of the i'th column
+            col[i][1].append(data)
+            #Increment i for the next column
+            i+=1
+    Dict={title:column for (title,column) in col}
+    return Dict['IP адрес и порт']
+
 # YandexPars
 def get_tags(photo_url):
     yandex_search = "https://yandex.ru/images/search?source=collections&rpt=imageview&rdrnd="+str(random.randint(100000, 999999))+"&redircnt="+str(random.randint(1000000000, 9999999999))+".1&url="+photo_url
@@ -51,7 +95,8 @@ def get_tags(photo_url):
         'Sec-Fetch-Site': 'none',
         'Sec-Fetch-Mode': 'navigate'
         }
-    proxies = { 'http' : 'http://188.170.233.113:3128' }
+    list_of_proxy=get_proxy()
+    proxies = { 'http' : 'http://'+list_of_proxy[random.randint(0, len(list_of_proxy)-1)] }
     html_url = requests.get(yandex_search, headers=headers, proxies=proxies) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
     tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]') # a теги с атрибутом clas равным "..."
@@ -61,7 +106,7 @@ def get_tags(photo_url):
 def get_result(photo_url):
     tags = get_tags(photo_url)
     if tags == []: # перепроверка, если нет тегов
-        time.sleep(random.randint(5, 8))
+        time.sleep(random.randint(1, 2))
         tags = get_tags(photo_url)
         if tags == []: # если второй раз нет тегов
             return "Кажется, на картинке что-то непонятное."
