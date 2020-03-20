@@ -31,10 +31,8 @@ def index():
             try:
                 object = data["object"]
                 attachments = object["attachments"]
-                print("1")
                 if attachments != []: # Проверяем есть ли прикрепления
-                    print("2")
-                    if attachments[1]["type"] == "photo": # Проверяем есть ли фото в прикреплении
+                    if attachments[0]["type"] == "photo": # Проверяем есть ли фото в прикреплении
                         print("3")
                         id = object["peer_id"]
                         print("4")
