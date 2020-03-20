@@ -32,7 +32,7 @@ def get_result(photo_url):
     message = "Кажется, на картинке " + tags + "."
     return message
 
-# VkApi
+# VKApi
 token = str(os.environ.get("TOKEN"))
 confirmation_token = str(os.environ.get("CONFIRMATION_TOKEN"))
 vk = vk_api.VkApi(token=token, api_version='5.89')
