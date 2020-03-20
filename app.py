@@ -15,7 +15,8 @@ import os
 app = Flask(__name__)
 sslify = SSLify(app)
 
-token = "dafd425228fbc59657b126eaba4c2530f4781af8a9ccbb53639c7a0dbc09db5670daf8cd8529297223658"
+token = str(os.environ.get("TOKEN"))
+confirmation_token = str(os.environ.get("CONFIRMATION_TOKEN"))
 vk = vk_api.VkApi(token=token, api_version='5.89')
 
 @app.route('/', methods=['POST', 'GET'])
@@ -37,8 +38,8 @@ def index():
                 # if body.lower() == "привет":
                 #     vk.method("messages.send", {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 2147483647)})
                 # ----------------------------
-            except:
-                print("LOG: Error while check attachments") # Лог ошибок
+            except Exception as log_errore:
+                print("LOG:", log_errore) # Лог ошибок
     elif request.method == 'GET':
         return '<h1>VKBot working now!</h1>'
     return 'OK'
