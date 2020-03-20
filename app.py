@@ -36,6 +36,7 @@ def index():
                 vk.method("messages.send", {"peer_id": id, "message": "Не понял тебя!", "random_id": random.randint(1, 2147483647)})
     elif request.method == 'GET':
         return '<h1>VKBot working now!</h1>'
+    return 'OK'
 #-Flask
 
 if __name__ == '__main__':
