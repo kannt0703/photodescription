@@ -12,6 +12,27 @@ import json # VKApi
 import os # VKApi & Heroku
 from lxml import html # YandexPars
 import time # YandexPars
+from threading import Thread # Thread
+from queue import Queue # FIFO
+
+# VKApi
+token = str(os.environ.get("TOKEN")) # токен ВК сообщества-бота
+confirmation_token = str(os.environ.get("CONFIRMATION_TOKEN")) # код подтверждения CallBack ВК
+vk = vk_api.VkApi(token=token, api_version='5.89') # иницилизация ВК Api с токеном и версией Api
+
+# FIFO
+queue = Queue() #очередь
+
+# Thread
+def completequeue():
+    while True:
+        try:
+            id, url_photo = queue.get()
+            vk.method("messages.send", {"peer_id": id, "message": url_photo, "random_id": random.randint(1, 2147483647)})
+        except Exception as log_errore:
+            print("LOG_completequeue:", log_errore) # Лог ошибок функции completequeue
+complete_queue = Thread(target=completequeue)
+complete_queue.start()
 
 # YandexPars
 def get_tags(photo_url):
@@ -30,7 +51,7 @@ def get_tags(photo_url):
         'Sec-Fetch-Site': 'none',
         'Sec-Fetch-Mode': 'navigate'
         }
-    proxies = { 'http' : 'http://@188.170.233.113:3128' }
+    proxies = { 'http' : 'http://188.170.233.113:3128' }
     html_url = requests.get(yandex_search, headers=headers, proxies=proxies) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
     tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]') # a теги с атрибутом clas равным "..."
@@ -47,11 +68,6 @@ def get_result(photo_url):
     tags = ", ".join(tags) # формирование списка тегов
     message = "Кажется, на картинке " + tags + "." # формирование сообщения
     return message
-
-# VKApi
-token = str(os.environ.get("TOKEN")) # токен ВК сообщества-бота
-confirmation_token = str(os.environ.get("CONFIRMATION_TOKEN")) # код подтверждения CallBack ВК
-vk = vk_api.VkApi(token=token, api_version='5.89') # иницилизация ВК Api с токеном и версией Api
 
 # Flask
 app = Flask(__name__) # иницилизация Сервера через Flask
@@ -73,17 +89,24 @@ def index():
                         photo = attachments[0]["photo"]
                         largest_photo = photo["sizes"][-1]
                         url_photo = largest_photo["url"]
-                        vk.method("messages.send", {"peer_id": id, "message": get_result(url_photo), "random_id": random.randint(1, 2147483647)})
+                        data = (id, url_photo)
+                        queue.put(data)
                 # ----- Обработка команд -----
                 # body = object["text"]
                 # if body.lower() == "привет":
                 #     vk.method("messages.send", {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 2147483647)})
                 # ----------------------------
             except Exception as log_errore:
-                print("LOG:", log_errore) # Лог ошибок
+                print("LOG_index:", log_errore) # Лог ошибок функции index
     elif request.method == 'GET': # Ответ, если GET запрос (загрузка страницы)
         return '<h1>VKBot working now!</h1>'
     return 'OK' # Постоянный ответ сервера
+
+# Thread
+#complete_queue.join()
+
+# FIFO
+#queue.join()
 
 # SystemDebug
 if __name__ == '__main__':
