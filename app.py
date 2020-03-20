@@ -29,9 +29,9 @@ def index():
             id = object["peer_id"]
             body = object["text"]
             if body.lower() == "привет":
-                    vk.method("messages.send", {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 2147483647)})
+                vk.method("messages.send", {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 2147483647)})
             elif body.lower() == "тест":
-                    vk.method("messages.send", {"peer_id": id, "message": "Тест!", "random_id": random.randint(1, 2147483647)})
+                vk.method("messages.send", {"peer_id": id, "message": "Тест!", "random_id": random.randint(1, 2147483647)})
             else:
                 vk.method("messages.send", {"peer_id": id, "message": "Не понял тебя!", "random_id": random.randint(1, 2147483647)})
     elif request.method == 'GET':
