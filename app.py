@@ -15,7 +15,7 @@ import time # YandexPars
 
 # YandexPars
 def get_tags(photo_url):
-    yandex_search = "https://yandex.ru/images/search?rpt=imageview&url="+photo_url
+    yandex_search = "https://yandex.ru/images/search?source=collections&rpt=imageview&rdrnd=250420&redircnt=1584733521.1&cbir_id=2475320%2FndbHpQwlZzlL3RRxgxryGA&url="+photo_url
     html_url = requests.get(yandex_search) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
     tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]') # a теги с атрибутом clas равным "..."
@@ -28,7 +28,7 @@ def get_result(photo_url):
         time.sleep(3)
         tags = get_tags(photo_url)
         if tags == []: # если второй раз нет тегов
-            message = "что-то непонятное"
+            return "Кажется, на картинке что-то непонятное."
     tags = ", ".join(tags) # формирование списка тегов
     message = "Кажется, на картинке " + tags + "." # формирование сообщения
     return message
