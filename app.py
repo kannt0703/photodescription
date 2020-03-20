@@ -26,15 +26,20 @@ def index():
     if request.method == 'POST':
         data = json.loads(request.data)
         if data["type"] == "confirmation": # подтверждение CallBack
-            return "88feaf44"
+            return confirmation_token
         elif data["type"] == "message_new":
             try:
                 object = data["object"]
                 attachments = object["attachments"]
+                print("1")
                 if attachments != []: # Проверяем есть ли прикрепления
-                    if attachments["type"] == "photo": # Проверяем есть ли фото в прикреплении
+                    print("2")
+                    if attachments[1]["type"] == "photo": # Проверяем есть ли фото в прикреплении
+                        print("3")
                         id = object["peer_id"]
+                        print("4")
                         vk.method("messages.send", {"peer_id": id, "message": "Фото!", "random_id": random.randint(1, 2147483647)})
+                        print("5")
                 # ----- Обработка команд -----
                 # body = object["text"]
                 # if body.lower() == "привет":
