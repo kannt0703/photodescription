@@ -27,9 +27,13 @@ def index():
             return "88feaf44"
         elif data["type"] == "message_new":
             object = data["object"]
+            print(object)
             try:
+                object_keys = object.keys()
+                print(object_keys)
                 if "attachments" in object.keys(): # Проверяем есть ли прикрепления
                     attachments = object["attachments"]
+                    print(attachments)
                     if attachments["type"] == "photo": # Проверяем есть ли фото в сообщении
                         id = object["peer_id"]
                         vk.method("messages.send", {"peer_id": id, "message": "Фото!", "random_id": random.randint(1, 2147483647)})
