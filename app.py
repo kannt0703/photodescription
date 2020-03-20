@@ -28,7 +28,7 @@ def index():
         elif data["type"] == "message_new":
             object = data["object"]
             try:
-                if "attachments" in object: # Проверяем есть ли прикрепления
+                if "attachments" in object.keys(): # Проверяем есть ли прикрепления
                     attachments = object["attachments"]
                     if attachments["type"] == "photo": # Проверяем есть ли фото в сообщении
                         id = object["peer_id"]
