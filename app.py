@@ -14,6 +14,9 @@ import os
 app = Flask(__name__)
 sslify = SSLify(app)
 
+token = "dafd425228fbc59657b126eaba4c2530f4781af8a9ccbb53639c7a0dbc09db5670daf8cd8529297223658"
+vk = vk_api.VkApi(token=token, api_version='5.89')
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
