@@ -65,6 +65,7 @@ def get_tags(photo_url):
     headers = {
         'User-Agent': UserAgent().get_random_user_agent(),
         }
+    list_of_proxy = get_proxy()
     proxies = { 'http' : 'http://'+list_of_proxy[random.randint(0, len(list_of_proxy)-1)] }
     html_url = requests.get(yandex_search, headers=headers, proxies=proxies) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
