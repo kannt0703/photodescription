@@ -13,8 +13,29 @@ import os # VKApi & Heroku
 from lxml import html # YandexPars
 import time # YandexPars
 from random_user_agent.user_agent import UserAgent # YandexPars
+from threading import Thread # Thread
+from queue import Queue # FIFO
 
-# ProxyPars
+# VKApi
+token = str(os.environ.get("TOKEN")) # токен ВК сообщества-бота
+confirmation_token = str(os.environ.get("CONFIRMATION_TOKEN")) # код подтверждения CallBack ВК
+vk = vk_api.VkApi(token=token, api_version='5.89') # иницилизация ВК Api с токеном и версией Api
+
+# FIFO
+queue = Queue() #очередь
+
+# Thread
+def completequeue():
+    while True:
+        try:
+            id, url_photo = queue.get()
+            vk.method("messages.send", {"peer_id": id, "message": get_result(url_photo), "random_id": random.randint(1, 2147483647)})
+        except Exception as log_errore:
+            print("LOG_completequeue:", log_errore) # Лог ошибок функции completequeue
+complete_queue = Thread(target=completequeue)
+complete_queue.start()
+
+#ProxyParse
 def get_proxy():
     proxy_site = "http://spys.one/"
     headers = {
@@ -61,11 +82,10 @@ def get_proxy():
 # YandexPars
 def get_tags(photo_url):
     yandex_search = "https://yandex.ru/images/search?source=collections&rpt=imageview&rdrnd="+str(random.randint(100000, 999999))+"&redircnt="+str(random.randint(1000000000, 9999999999))+".1&url="+photo_url
-    print(yandex_search)
     headers = {
         'User-Agent': UserAgent().get_random_user_agent(),
         }
-    list_of_proxy = get_proxy()
+    list_of_proxy=get_proxy()
     proxies = { 'http' : 'http://'+list_of_proxy[random.randint(0, len(list_of_proxy)-1)] }
     html_url = requests.get(yandex_search, headers=headers, proxies=proxies) # загрузить страницу запроса
     tree_html = html.fromstring(html_url.text.encode('UTF-8')) # получить html страницы запроса
@@ -74,25 +94,19 @@ def get_tags(photo_url):
     if tags == []:
         print(html_url.text.encode('UTF-8'))
     else:
-        print(tags_tree)
         print(tags)
     return tags
 
 def get_result(photo_url):
     tags = get_tags(photo_url)
     if tags == []: # перепроверка, если нет тегов
-        time.sleep(random.randint(5, 8))
+        time.sleep(random.randint(1, 2))
         tags = get_tags(photo_url)
         if tags == []: # если второй раз нет тегов
             return "Кажется, на картинке что-то непонятное."
     tags = ", ".join(tags) # формирование списка тегов
     message = "Кажется, на картинке " + tags + "." # формирование сообщения
     return message
-
-# VKApi
-token = str(os.environ.get("TOKEN")) # токен ВК сообщества-бота
-confirmation_token = str(os.environ.get("CONFIRMATION_TOKEN")) # код подтверждения CallBack ВК
-vk = vk_api.VkApi(token=token, api_version='5.89') # иницилизация ВК Api с токеном и версией Api
 
 # Flask
 app = Flask(__name__) # иницилизация Сервера через Flask
@@ -114,17 +128,24 @@ def index():
                         photo = attachments[0]["photo"]
                         largest_photo = photo["sizes"][-1]
                         url_photo = largest_photo["url"]
-                        vk.method("messages.send", {"peer_id": id, "message": get_result(url_photo), "random_id": random.randint(1, 2147483647)})
+                        data = (id, url_photo)
+                        queue.put(data)
                 # ----- Обработка команд -----
                 # body = object["text"]
                 # if body.lower() == "привет":
                 #     vk.method("messages.send", {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 2147483647)})
                 # ----------------------------
             except Exception as log_errore:
-                print("LOG:", log_errore) # Лог ошибок
+                print("LOG_index:", log_errore) # Лог ошибок функции index
     elif request.method == 'GET': # Ответ, если GET запрос (загрузка страницы)
         return '<h1>VKBot working now!</h1>'
     return 'OK' # Постоянный ответ сервера
+
+# Thread
+#complete_queue.join()
+
+# FIFO
+#queue.join()
 
 # SystemDebug
 if __name__ == '__main__':
