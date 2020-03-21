@@ -4,3 +4,4 @@ requests==2.22.0
 gunicorn==19.9.0
 vk_api
 lxml
+random_user_agent
