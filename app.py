@@ -47,17 +47,18 @@ def photo(data='', id=''):
 queue = queue.Queue()
 
 class Task(object):
-    def __init__(self, func, data):
+    def __init__(self, func='', data='', id=''):
         self.func = func
         self.data = data
+        self.id = id
 
 def distribution():
     while not queue.empty():
         task = queue.get()
-        Thread(target=task.func, args=(task.data,),daemon=True).start()
+        Thread(target=task.func, args=(task.data, task.id,),daemon=True).start()
 
-def new_task(func, data=''):
-    task = Task(func, data)
+def new_task(func, data='', id=''):
+    task = Task(func, data, id)
     queue.put(task)
     Thread(target=distribution, daemon=True).start()
 ##############
