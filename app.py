@@ -97,6 +97,9 @@ def index():
                     data = url_photo
                     new_task(func, data, id)
         elif request.method == 'GET':
+            check_file = os.path.exists('./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata')
+            print("Check file:")
+            print(check_file)
             return '<h1>Description VKBot working now!</h1>'
         return 'OK'
     except Exception as log_errore:
@@ -106,7 +109,5 @@ def index():
 
 ############## System
 if __name__ == '__main__':
-    check_file = os.path.exists('./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata')
-    print(check_file)
     app.run()
 ##############
