@@ -3,3 +3,4 @@ Flask-SSLify
 requests
 gunicorn
 vk_api
+lxml
