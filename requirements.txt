@@ -3,4 +3,6 @@ Flask-SSLify
 requests
 gunicorn
 vk_api
+pytesseract
+Pillow
 lxml

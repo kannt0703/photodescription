@@ -38,12 +38,17 @@ def message(data='', id=''):
 
 def photo(data='', id=''):
     url=str(data)
-    tags=yandexparse.get_tags(url)
-    if tags == []: # перепроверка, если нет тегов
+    parse=yandexparse.get_tags(url)
+    tags=parse[0]
+    text=parse[1]
+    if tags == []:
         result="Кажется, на картинке что-то непонятное."
     else:
         result="Кажется, на картинке " + ", ".join(tags) + "."
     message(result, id)
+    if text != '':
+        result="Распознан следующий текст: " + text
+        message(result, id)
 ##############
 
 
