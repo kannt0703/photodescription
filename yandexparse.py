@@ -31,6 +31,12 @@ def get_tags(photo_url):
     tree_html = html.fromstring(html_url.text.encode('UTF-8'))
     tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]')
     tags = [i.text for i in tags_tree]
+    if tags == []:
+        proxies = { 'https' : 'https://'+get_proxy() }
+        html_url = requests.get(yandex_search, proxies=proxies, headers=headers)
+        tree_html = html.fromstring(html_url.text.encode('UTF-8'))
+        tags_tree = tree_html.xpath('//a[contains(@class, "tags__tag")]')
+        tags = [i.text for i in tags_tree]
     return tags
 
 
