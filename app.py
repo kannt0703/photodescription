@@ -98,8 +98,22 @@ def index():
                     new_task(func, data, id)
         elif request.method == 'GET':
             check_file = os.path.exists('./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata')
-            print("Check file:")
+            print("Check file: ./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata")
             print(check_file)
+
+            check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
+            print("Check file: /app/vendor/tesseract-ocr/share/tessdata/rus.traineddata")
+            print(check_file)
+
+            import shutil
+            os.makedirs(path="/app/vendor/tesseract-ocr/share/tessdata/", mode=0o777, exist_ok=False)
+            shutil.copy(r'./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata', r'/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
+            check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
+            print("Recheck file: /app/vendor/tesseract-ocr/share/tessdata/rus.traineddata")
+            print(check_file)
+
+            listdir = os.listdir(path=".")
+            print(listdir)
             return '<h1>Description VKBot working now!</h1>'
         return 'OK'
     except Exception as log_errore:
