@@ -97,26 +97,14 @@ def index():
                     data = url_photo
                     new_task(func, data, id)
         elif request.method == 'GET':
-            listdir = os.listdir(path=".")
-            print("path=.")
-            print(listdir)
-            listdir = os.listdir(path="./.apt")
-            print("path=./.apt")
-            print(listdir)
-            listdir = os.listdir(path="/app")
-            print("path=/app")
-            print(listdir)
-
-            check_file = os.path.exists('./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata')
-            print("Check file: ./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata")
-            print(check_file)
+            check_file = os.path.exists('./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata') # True
 
             check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
             print("Check folder: /app/vendor/tesseract-ocr/share/tessdata")
             print(check_file)
 
-            path = r'/app/vendor/tesseract-ocr/share/tessdata'
-            os.makedirs(path)
+            print("Make Dirs")
+            os.makedirs('/app/vendor/tesseract-ocr/share/tessdata')
 
             check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
             print("Recheck folder: /app/vendor/tesseract-ocr/share/tessdata")
