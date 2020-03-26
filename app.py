@@ -47,7 +47,7 @@ def photo(data='', id=''):
         result="Кажется, на картинке " + ", ".join(tags) + "."
     message(result, id)
     if text != '':
-        result="Распознан следующий текст: " + text
+        result="Распознан следующий текст:\n" + text
         message(result, id)
 ##############
 
