@@ -4,8 +4,10 @@ import requests
 import shutil
 from PIL import Image
 import os
+import shutil
 
 
+shutil.copy(r'./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata', r'/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
 pytesseract.pytesseract.tesseract_cmd = '/app/vendor/tesseract-ocr/bin/tesseract'
 
 def get_ocr(url):

@@ -97,29 +97,6 @@ def index():
                     data = url_photo
                     new_task(func, data, id)
         elif request.method == 'GET':
-            check_file = os.path.exists('./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata') # True
-
-            check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
-            print("Check folder: /app/vendor/tesseract-ocr/share/tessdata")
-            print(check_file)
-
-            print("Make Dirs")
-            os.makedirs('/app/vendor/tesseract-ocr/share/tessdata', exist_ok=True)
-
-            check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
-            print("Recheck folder: /app/vendor/tesseract-ocr/share/tessdata")
-            print(check_file)
-
-            check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
-            print("Check file: /app/vendor/tesseract-ocr/share/tessdata/rus.traineddata")
-            print(check_file)
-
-            import shutil
-            shutil.copy(r'./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata', r'/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
-            check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
-            print("Recheck file: /app/vendor/tesseract-ocr/share/tessdata/rus.traineddata")
-            print(check_file)
-
             return '<h1>Description VKBot working now!</h1>'
         return 'OK'
     except Exception as log_errore:
