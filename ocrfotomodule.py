@@ -17,7 +17,7 @@ def get_ocr(url):
     new_size = tuple(4*x for x in img.size)
     img = img.resize(new_size, Image.ANTIALIAS)
     img.save("4x"+filename)
-    text = pytesseract.image_to_string(Image.open("4x"+filename), lang='rus')
+    text = pytesseract.image_to_string(Image.open("4x"+filename))
     text = text.replace("\n\n","\n")
     os.remove(filename)
     os.remove("4x"+filename)
