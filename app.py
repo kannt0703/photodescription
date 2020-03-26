@@ -106,5 +106,6 @@ def index():
 
 ############## System
 if __name__ == '__main__':
+    check_file = os.path.exists('./.apt/usr/share/tesseract-ocr/4.00/tessdata/rus.traineddata')
     app.run()
 ##############
