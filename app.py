@@ -104,7 +104,7 @@ def index():
             print(check_file)
 
             print("Make Dirs")
-            os.makedirs('/app/vendor/tesseract-ocr/share/tessdata')
+            os.makedirs('/app/vendor/tesseract-ocr/share/tessdata', exist_ok=True)
 
             check_file = os.path.exists('/app/vendor/tesseract-ocr/share/tessdata/rus.traineddata')
             print("Recheck folder: /app/vendor/tesseract-ocr/share/tessdata")
