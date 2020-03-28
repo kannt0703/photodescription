@@ -30,10 +30,10 @@ vk = vk_api.VkApi(token=token, api_version='5.89')
 
 ############## Functions
 def message(data='', id=''):
-    data=str(data)[:1000]
+    data=str(data)[:4096]
     vk.method("messages.send", {"peer_id": id, "message": data, "random_id": random.randint(1, 2147483647)})
-    if len(data) >= 1000:
-        cutmessage = "Ответ отображен не полностью: максимальное значение 1000 символов"
+    if len(data) >= 4096:
+        cutmessage = "Ответ отображен не полностью: максимальное значение 4096 символов"
         vk.method("messages.send", {"peer_id": id, "message": cutmessage, "random_id": random.randint(1, 2147483647)})
 
 def photo(data='', id=''):
